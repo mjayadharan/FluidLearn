@@ -3,8 +3,9 @@ Software package to solve PDEs governing fluid flow using Physics Inspired Neura
 Uses Keras API with TensorFlow2 as the backend. Developed as part of a project to study the use of artificial neural networks in solving computational fluid dynamics problem.   
 
 
-### Note:
-- As of now, the simulators are embdedded inside jupyter notebooks.   
+### Note: 
+- As of now, the simulators are embdedded inside jupyter notebooks.    
+- Matplotlib is used as a visualization tool along with TensorBoard.  
 - Only feed forwards networks are implemented so far. Expect more advanced network structures to be implemented in future.  
 - Python module version of the package will be uploaded upon developing the UI  of the package to certain satisfactory level.   
 
