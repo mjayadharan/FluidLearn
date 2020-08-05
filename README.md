@@ -30,7 +30,7 @@ email: [manu.jayadharan@gmail.com](mailto:manu.jayadharan@gmail.com), [manu.jaya
 - Starting a jupyter notebook:  
  `jupyter notebook`  
 __Installing required packages:__   
-conda install numpy matplotlib tensorflow  
+`conda install numpy matplotlib tensorflow`  
 __Installing recommended packages:__  
-conda install numpy pandas matplotlib scikit-learn tensorflow jupyter  
+`conda install numpy pandas matplotlib scikit-learn tensorflow jupyter`  
 
