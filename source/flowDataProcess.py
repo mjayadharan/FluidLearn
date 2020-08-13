@@ -1,7 +1,24 @@
 #!/usr/bin/env python
+# coding: utf-8
 
-#Module for processind data before feeding to the FlowNet module for training and
-#predictions
+# In[2]:
+
+
+"""
+Module containing various data processing tools for FlowNet PDE solver.
+"""
+
+import numpy as np
+
+__author__ = "Manu Jayadharan"
+__copyright__ = "Copyright 2020, FlowNet"
+__credits__ = ["Manu Jayadharan"]
+__license__ = ""
+__version__ = "1.0.0"
+__maintainer__ = "Manu Jayadharan"
+__email__ = "manu.jayadharan@pitt.edu"
+__status__ = "Development"
+
 class Data_preprocess:
     """
     Class to preprocess data before going into the FlowNet class. This is used as part of the 
@@ -13,7 +30,6 @@ class Data_preprocess:
     Currently doesn't do any scaling, but scaling feature can easily be implemented using keras api 
     scaling wrapper. 
     """
-    import numpy as np
     def __init__(self, space_dim, dom_bounds=[[]], time_dep=False):
         """
         space_dim (int) - dimension of the space.
