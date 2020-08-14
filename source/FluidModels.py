@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+# coding: utf-8
+
+# In[9]:
 
 
 """
@@ -17,7 +20,7 @@ __author__ = "Manu Jayadharan"
 __copyright__ = "Copyright 2020, FlowNet"
 __credits__ = ["Manu Jayadharan"]
 __license__ = ""
-__version__ = "1.0.0"
+__version__ = "0.1.0"
 __maintainer__ = "Manu Jayadharan"
 __email__ = "manu.jayadharan@pitt.edu"
 __status__ = "Development"     
@@ -28,7 +31,7 @@ class ForwardModel(tf.keras.Model):
     """
       
     def __init__(self, space_dim=1, time_dep=False, output_dim=1,
-                 n_hid_lay=3, n_hid_nrn=20, act_func = "tanh"):
+                 n_hid_lay=3, n_hid_nrn=20, act_func = "tanh", rhs_func = None):
         """
         space_dim (int) -> Dimension of the space Omega where the PDE is defined.
         time_dep (bool) -> True if the problem is time dependent.
@@ -58,6 +61,12 @@ class ForwardModel(tf.keras.Model):
         self.final_layer = keras.layers.Dense(self.output_dim,
                                          name="final_layer")        
         
+        #Defining the rhs of PDE: P(u,delu) = f(x,t)
+        if rhs_func != None:
+            self.rhs_function = rhs_func
+        else:
+            self.rhs_function = lambda x: 0
+        
     def findGrad(self,func,input_space):
         """
         Find gradient with respect to the domain Omega of the PDE. 
@@ -83,7 +92,7 @@ class ForwardModel(tf.keras.Model):
                                                                unconnected_gradients='zero')
                                                   for x_i in z[1] ]) ([func, input_space])
         except Exception as e:
-            print("Error occured in finding the time derrivative  lambda layer of type {} as follows: \n{}".format(type(e)),e)
+            raise Exception("Error occured in finding the time derrivative  lambda layer of type {} as follows: \n{}".format(type(e)),e)
           
         
     def findTimeDer(self,func,input_time):
@@ -111,7 +120,7 @@ class ForwardModel(tf.keras.Model):
             return keras.layers.Lambda(lambda z: tf.gradients(z[0],z[1],
                                                                unconnected_gradients='zero') [0]) ([func, input_time])
         except Exception as e:
-            print("Error occured in find gradient lambda layer of type {} as follows: \n{} ".format(type(e)),e)
+            raise Exception("Error occured in find gradient lambda layer of type {} as follows: \n{} ".format(type(e)),e)
             
             
     def findLaplace(self,first_der,input_space):
@@ -143,7 +152,7 @@ class ForwardModel(tf.keras.Model):
             return sum(del_sq_layer)
                 
         except Exception as e:
-            print("Error occured in find laplacian lambda layer of type {} as follows: \n{}".format(type(e)),e)
+            raise Exception("Error occured in find laplacian lambda layer of type {} as follows: \n{}".format(type(e)),e)
     
     #final layer representing the lhs P(x,t) of PDE P(x,t)=0
     def findPdeLayer(self, laplacian, input_arg, time_der=0):
@@ -165,11 +174,22 @@ class ForwardModel(tf.keras.Model):
         
         """
         try:
-            return keras.layers.Lambda(lambda z: z[0] - z[1] - tf.sin(z[2][0]+z[2][1]) - 
-                                       2*z[2][2]*tf.sin(z[2][0]+z[2][1])) ([time_der, laplacian, input_arg])
+#             return keras.layers.Lambda(lambda z: z[0] - z[1] - tf.sin(z[2][0]+z[2][1]) - 
+#                                        2*z[2][2]*tf.sin(z[2][0]+z[2][1])) ([time_der, laplacian, input_arg])
+            return keras.layers.Lambda(lambda z: z[0] - z[1] - self.rhs_function(input_arg)) ([time_der, laplacian, input_arg])
         except Exception as e:
-            print("Error occured in finding pde  lambda layer of type {} as follows: \n{}".format(type(e)),e)
+            raise Exception("Error occured in finding pde  lambda layer of type {} as follows: \n{}".format(type(e)),e)
     
+    def get_config(self):
+        #getting basic config using the parent model class
+        base_config = super().get_config()
+        return {**base_config, "space_dim": self.space_dim, 
+                "time_dep": self.time_dep, "output_dim": self.output_dim,
+                 "n_hid_lay": self.n_hid_lay, "n_hid_nrn": self.n_hid_nrn,
+                "act_func": self.act_func }
+    
+    def from_config(self, config, custom_objects):
+        super().from_config(config)
     
     def call(self, inputs, training=False):
         """
@@ -192,7 +212,7 @@ class ForwardModel(tf.keras.Model):
                 input_space = inputs[:-1]
                 input_time = inputs[-1]
             except Exception as e:
-                print("Error occured while separating spacial and temporal data from inputs,                make sure that spacio-temporal data is being used to for training and                 x=[space_dim1,..,space_dimn,time_dim]. More details on error below:\n", type(e), e)
+                raise Exception("Error occured while separating spacial and temporal data from inputs,                make sure that spacio-temporal data is being used to for training and                 x=[space_dim1,..,space_dimn,time_dim]. More details on error below:\n", type(e), e)
         else:
             input_space = inputs
         
@@ -203,9 +223,7 @@ class ForwardModel(tf.keras.Model):
         #hidden layers
         for layer_id in range(self.n_hid_lay):
             hidden_output = self.hidden_block[layer_id] (hidden_output)
-#         layer_1 = self.dense_1(inputs_conc)
-#         layer_2 = self.dense_2(layer_1)
-#         layer_3 = self.dense_3(layer_2)
+
         
         #output layer, this is typically the solution function
         output_layer = self.final_layer(hidden_output)
@@ -225,15 +243,6 @@ class ForwardModel(tf.keras.Model):
         elif not training: #only outputting the function value if not tranining.
                 return output_layer
 
-    def get_config(self):
-        #getting basic config using the parent model class
-        base_config = super().get_config()
-        return {**base_config, "space_dim": self.space_dim, 
-                "time_dep": self.time_dep, "output_dim": self.output_dim,
-                 "n_hid_lay": self.n_hid_lay, "n_hid_nrn": self.n_hid_nrn,
-                "act_func": self.act_func }
-    
-    def from_config(self, config, custom_objects):
-        super().from_config(config)
+
         
 

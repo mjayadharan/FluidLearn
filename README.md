@@ -1,4 +1,4 @@
-# FlowNet
+# FluidLearn
 Software package to solve PDEs governing fluid flow using Physics Inspired Neural Networks (PINNs) and estimate physical parameters using the trained network.
 Uses Keras API with TensorFlow2 as the backend. Developed as part of a project to study the use of artificial neural networks in solving computational fluid dynamics problem.   
 
