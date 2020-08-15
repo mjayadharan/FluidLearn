@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[68]:
-
-
 """
 Module containing various data processing tools for fluidlearn PDE solver.
 """
@@ -19,7 +14,7 @@ __maintainer__ = "Manu Jayadharan"
 __email__ = "manu.jayadharan@pitt.edu"
 __status__ = "Development"
 
-class Data_preprocess:
+class DataPreprocess:
     """
     Class to preprocess data before going into the fluidlearn class. This is used as part of the 
     fluidlearn module, but can also be used as a standalone data preprocessor. Only depends on numpy

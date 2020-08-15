@@ -1,9 +1,4 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[4]:
-
-
 """
 Module containing various loss functions for fluidlearn PDE solver.
 """
