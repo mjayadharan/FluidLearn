@@ -27,6 +27,7 @@ class Solver:
     Main class for solving the PDES using the fluidlearn architechture. Users deal with it, 
     talk about __call__ function
     """
+    
     def __init__(self):
         """
         Doc string goes here
