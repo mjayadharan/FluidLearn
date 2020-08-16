@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
+#Exported from jupter notebook
 # # Using fluidlearn to solve diffusion equation
-
+###
+##Author: Manu Jayadharan, University of Pittsburgh, 2020.
+###
 # `Equation to solve: $u_t-\Delta u -f  = 0$
 # over domain $\Omega$ from time T_initial to T_final.
 
