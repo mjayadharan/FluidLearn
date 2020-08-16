@@ -1,24 +1,23 @@
 #!/usr/bin/env python
-
 """
-Module containing various data processing tools for FlowNet PDE solver.
+Module containing various data processing tools for fluidlearn PDE solver.
 """
 
 import numpy as np
 
 __author__ = "Manu Jayadharan"
-__copyright__ = "Copyright 2020, FlowNet"
+__copyright__ = "Copyright 2020, fluidlearn"
 __credits__ = ["Manu Jayadharan"]
 __license__ = ""
-__version__ = "1.0.0"
+__version__ = "0.1.0"
 __maintainer__ = "Manu Jayadharan"
 __email__ = "manu.jayadharan@pitt.edu"
 __status__ = "Development"
 
-class Data_preprocess:
+class DataPreprocess:
     """
-    Class to preprocess data before going into the FlowNet class. This is used as part of the 
-    FlowNet module, but can also be used as a standalone data preprocessor. Only depends on numpy
+    Class to preprocess data before going into the fluidlearn class. This is used as part of the 
+    fluidlearn module, but can also be used as a standalone data preprocessor. Only depends on numpy
     from external packages. Can deal with any iterable numpy-type arrays (including python lists,
     numpy nd-arrays, tf-tensors tc), which are inturn converted to numpy nd-arrays after processing.
     Can further improve on this by developing a more efficient and general data processing pipeline 
@@ -61,9 +60,9 @@ class Data_preprocess:
         Y_data_np (numpy type iterable) - Returned only if Y_data is non-empty. Array of shape (m,o+1).
         where m is the number of data points and o is the dimension of the output. 
         
-        Purpose: Prepares the data to make it compatible to be fed to FlowNet's predict, evaluate, train etc.
+        Purpose: Prepares the data to make it compatible to be fed to fluidlearn's predict, evaluate, train etc.
         If Y_data is empty, then X_data is just treated as points for prediction. Otherwise Y_data is also 
-        processed, either for feeding to self.get_training_data or to feed to FlowNet's evaluate method. 
+        processed, either for feeding to self.get_training_data or to feed to fluidlearn's evaluate method. 
         """
         
         #asserting that X_data and problem dimensions are compatible
@@ -108,7 +107,7 @@ class Data_preprocess:
         dist (string key) - distribution of the collocation points inside the doman. Currently options 
         include "uniform" and "normal"
         
-        shuffle (bool) - whether the data needs to be shuffled before feeding into FlowNet
+        shuffle (bool) - whether the data needs to be shuffled before feeding into fluidlearn
         
         return: X_train, Y_train
         ------------------------
@@ -121,37 +120,86 @@ class Data_preprocess:
         possible_dist = {"uniform", "normal"}
         assert (dist in possible_dist), "given distribution for collocation points is not supported"
         
-        if type(X_col_points) == int:
-            num_col_points = X_col_points
-            if dist == "uniform":
-                X_col_points = [np.random.uniform(self.dom_bounds[i][0],
-                                                     self.dom_bounds[i][1],
-                                                     num_col_points).reshape(num_col_points,1)
-                                   for i in range(self.problem_dim)
-
-                                  ]
-            elif dist == "normal":
-                X_col_points = [np.random.normal(self.dom_bounds[i][0],
-                                                     self.dom_bounds[i][1],
-                                                     num_col_points).reshape(num_col_points,1)
-                                   for i in range(self.problem_dim)
-
-                                  ]
+        if type(X_col_points) == int and X_col_points !=0:
+            if X_col_points !=0:
+                num_col_points = X_col_points
+                if dist == "uniform":
+                    X_col_points = [np.random.uniform(self.dom_bounds[i][0],
+                                                         self.dom_bounds[i][1],
+                                                         num_col_points).reshape(num_col_points,1)
+                                       for i in range(self.problem_dim)
+        
+                                      ]
+                elif dist == "normal":
+                    X_col_points = [np.random.normal(self.dom_bounds[i][0],
+                                                         self.dom_bounds[i][1],
+                                                         num_col_points).reshape(num_col_points,1)
+                                       for i in range(self.problem_dim)
+        
+                                      ]
         else:
             X_col_points = self.prepare_input_data(X_col_points)
             
         #Generating the zero right hand side for the pde Pde(x,t) = 0, right column is 0.0 to indicate
-        #that the a pde loss function is to be used for training. refer to FlowNet::pde_loss
+        #that the a pde loss function is to be used for training. refer to fluidlearn::pde_loss
         Y_col_points = np.zeros( (len(X_col_points[0]), len(Y_data[0])+1) )
 
 
         X_bc_ic, Y_bc_ic =  self.prepare_input_data(X_data, Y_data)
         
-        #In the format compatible for FlowNet
+        #In the format compatible for fluidlearn
         assert (len(X_bc_ic) == len(X_col_points)), "Generated X_col_points and X_bc_ic condition points are with incompatible size"
         X_tr_combined = [np.concatenate( [X_bc_ic[i], X_col_points[i]], axis=0)  for i in range(len(X_bc_ic)) ]
         Y_tr_combined = np.concatenate([Y_bc_ic, Y_col_points])
 
         return X_tr_combined, Y_tr_combined
-            
+ 
+
+def save_to_csv(np_array, name_of_file=""):
+    """
+    (nd_array, string) - > None
+    Save the np_array in the csv format in the file mentioned in name_of_file. If the file name does 
+    not include '.csv' at the end, it is added automatically.
+    
+    """
+    assert (len(np_array>0)), "Error: tried to save incompatible file to csv format"
+    name_of_file += ".csv" if name_of_file[-4:] != ".csv" else ""
+    
+    try:
+        np.savetxt(name_of_file, np_array, delimiter=',')
+    except Exception as e:
+        raise Exception("Error occured while saving to csv file, of type {} as follows: \n{}".format(type(e),e))
+    
+    return None
+
+def imp_from_csv(path_to_csv_file="", x_y_combined=True, y_dim=1):
+    """
+    (string, True, int) -> (numpy_nd_array_1, numpy_nd_array_2)
+    (string, False int) -> numpy_nd_array
+    
+    path_to_csv_file (string) : the address to the .csv file.
+    
+    x_y_combined (bool): if True returns a tuple with X_data in first component and 
+    Y_data in second component, otherwise return a numpy_nd_array.
+    
+    y_dim (int) : dim of range of the predicted function.
+    
+    Loads data from a csv file and returns a numpy nd array. Compatible with save_to_csv.
+    make sure that path_to_csv_file refers to a .csv extension file.
+    
+    """
+    assert (path_to_csv_file[-4:] == ".csv"), "Error: incomptabile data given to path_to_csv_file"
+
+    try:
+        loaded_array =  np.loadtxt(path_to_csv_file, delimiter=',')
+        if x_y_combined:
+            loaded_x = loaded_array[:,0:-y_dim]
+            loaded_y = loaded_array[:,-y_dim:]
+    except Exception as e:
+        raise Exception("Error occured while loading csv file of  type {} as follows: \n{}".format(type(e),e))
+
+    if x_y_combined:
+        return loaded_x, loaded_y
+    else:
+        return loaded_array
 

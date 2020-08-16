@@ -1,2 +1,5 @@
 *pynb_checkpoints
 __pycache__
+.project
+.settings
+.pydevproject

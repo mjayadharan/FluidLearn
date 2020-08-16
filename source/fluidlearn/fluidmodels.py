@@ -1,11 +1,6 @@
 #!/usr/bin/env python
-# coding: utf-8
-
-# In[9]:
-
-
 """
-Module containng custom Keras models and layers required for FlowNet architecture.
+Module containng custom Keras models and layers required for fluidlearn architecture.
 """
 
 try:     
@@ -17,7 +12,7 @@ except Exception as e:
         print("Error occured while importing dependency packages. More details:\n",e)
         
 __author__ = "Manu Jayadharan"
-__copyright__ = "Copyright 2020, FlowNet"
+__copyright__ = "Copyright 2020, fluidlearn"
 __credits__ = ["Manu Jayadharan"]
 __license__ = ""
 __version__ = "0.1.0"
