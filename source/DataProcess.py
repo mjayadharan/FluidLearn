@@ -36,14 +36,14 @@ class Data_preprocess:
         
         dom_bounds (list of lists) - list of space_dim number of elements,
         where each element is an intervel giving bound on the space domain,
-        dom_bounds[-1] is time boudns if time_dep=True.
+        dom_bounds[-1] is time boudns if _time_dep=True.
         
-        time_dep (bool) - true if the pde is time dependent.
+        _time_dep (bool) - true if the pde is time dependent.
         """
         
         self.space_dim = space_dim
         self.dom_bounds = dom_bounds
-        self.time_dep = time_dep
+        self._time_dep = time_dep
         self.problem_dim = space_dim + time_dep
         if dom_bounds[0]:
             assert (len(dom_bounds) == self.problem_dim), "domain bounds given incompatible with the space-time dimension"
@@ -71,7 +71,7 @@ class Data_preprocess:
         """
         
         #asserting that X_data and problem dimensions are compatible
-        assert (len(X_data[0]) == self.space_dim + self.time_dep), "X_data and problem dimensions incompatible"
+        assert (len(X_data[0]) == self.space_dim + self._time_dep), "X_data and problem dimensions incompatible"
         X_data_np = np.array(X_data)
         X_data_return = [X_data_np[:,i,np.newaxis] for i in range(len(X_data_np[0]))]
         if len(Y_data) > 0: 

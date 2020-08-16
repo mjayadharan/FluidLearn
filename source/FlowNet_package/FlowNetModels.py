@@ -31,7 +31,7 @@ class ForwardModel(tf.keras.Model):
                  n_hid_lay=3, n_hid_nrn=20, act_func = "tanh"):
         """
         space_dim (int) -> Dimension of the space Omega where the PDE is defined.
-        time_dep (bool) -> True if the problem is time dependent.
+        _time_dep (bool) -> True if the problem is time dependent.
         output_dim (int) -> Dimension of the range of the solution to PDE.
         
         n_hid_layer (int) -> Number of hidden layers in the neural network.
@@ -46,7 +46,7 @@ class ForwardModel(tf.keras.Model):
         
         #Defining class atributes
         self.space_dim = space_dim
-        self.time_dep = time_dep
+        self._time_dep = time_dep
         self.output_dim = output_dim
         self.n_hid_lay = n_hid_lay
         self.n_hid_nrn = n_hid_nrn
@@ -106,7 +106,7 @@ class ForwardModel(tf.keras.Model):
         See tf.Keras.Lambda and tf.gradients for more details.
         
         """
-        assert (self.time_dep), "Tried taking time derrivative even though the problem is not time dependent."
+        assert (self._time_dep), "Tried taking time derrivative even though the problem is not time dependent."
         try:
             return keras.layers.Lambda(lambda z: tf.gradients(z[0],z[1],
                                                                unconnected_gradients='zero') [0]) ([func, input_time])
@@ -178,7 +178,7 @@ class ForwardModel(tf.keras.Model):
         arguments:
         ----------
         inputs (list of tensors) -> last element of the list corresponds to temporal diimension if 
-                                    self.time_dep = True. If possible, always feed the data from the 
+                                    self._time_dep = True. If possible, always feed the data from the 
                                     data processing method in flowDataProcess module.
         training (bool) -> True if calling the function for training. False for prediction and evaluation. 
                            Value of triainng will be automatically taken care of by Keras. 
@@ -186,7 +186,7 @@ class ForwardModel(tf.keras.Model):
         Note that inputs should always be given as a list with the last element of the list representing the 
         dimension corresponding to time.
         """
-        if self.time_dep:
+        if self._time_dep:
             try:
                 assert(len(inputs) > 1)
                 input_space = inputs[:-1]
@@ -214,7 +214,7 @@ class ForwardModel(tf.keras.Model):
             #pde specific layers
             grad_layer = self.findGrad(output_layer, input_space)
             laplace_layer = self.findLaplace(grad_layer, input_space)
-            if self.time_dep: 
+            if self._time_dep: 
                 time_der_layer = self.findTimeDer(output_layer, input_time)
             else:
                 time_der_layer=0
@@ -229,7 +229,7 @@ class ForwardModel(tf.keras.Model):
         #getting basic config using the parent model class
         base_config = super().get_config()
         return {**base_config, "space_dim": self.space_dim, 
-                "time_dep": self.time_dep, "output_dim": self.output_dim,
+                "_time_dep": self._time_dep, "output_dim": self.output_dim,
                  "n_hid_lay": self.n_hid_lay, "n_hid_nrn": self.n_hid_nrn,
                 "act_func": self.act_func }
     
