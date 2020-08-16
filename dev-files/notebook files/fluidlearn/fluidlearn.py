@@ -112,7 +112,7 @@ class Solver:
         assert (self._trained), "Model is not trained yet, please call fit method for training"
         
         x_prepared = self._data_handler.prepare_input_data(x)
-        return self._model.preict(x=x_prepared)
+        return self._model.predict(x=x_prepared)
     
     def evaluate(self, x, y):
         """
