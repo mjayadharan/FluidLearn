@@ -69,6 +69,7 @@ Once installed make sure that you have a compatible version of tensorflow by run
 - Go through [examples](https://github.com/mjayadharan/FluidLearn/tree/master/examples) to understand the user interface of fluidlearn. 
 - Examples can be treated as tutorials with the two digit numerals at the beginning of the name indicating the order. For example examples/01_difussion_example is the first example in the series. This example shows how to upload data from a csv file, select nerual architechure, train the model, make prediction and finally how to save and reload the model. 
 - All examples are given in both .ipynb and .py formats.
+- If you are using the notebook file (.ipynb), make sure that jupyter notebook is installed in the same environment containing fluidlearn and you have started the notebook using `jupyter notebook` in the appropriate environment.  
 
 ## Coming in future versions
 
