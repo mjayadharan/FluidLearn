@@ -23,6 +23,7 @@ While the users will find no problem accessing the package through a regular pyt
 ------------
 
 Manu Jayadharan, Department of Mathematics at University of Pittsburgh, 2020.  
+[GitHub](https://github.com/mjayadharan)  
 email: [manu.jayadharan@gmail.com](mailto:manu.jayadharan@gmail.com), [manu.jayadharan@pitt.edu](mailto:manu.jayadharan@pitt.edu)  
 [researchgate](https://www.researchgate.net/profile/Manu_Jayadharan)  
 [linkedin](https://www.linkedin.com/in/manu-jayadharan/)
@@ -32,11 +33,12 @@ email: [manu.jayadharan@gmail.com](mailto:manu.jayadharan@gmail.com), [manu.jaya
 
 FluidLearn depends primarily on tensorflow (>=v2.2) and numpy. Make sure you have these packages already available, otherwise please follow the instructions below to install them. Installing all packages inside a separate environment is always recommended in order to prevent version conflicts. You could either use [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) package or a  package manager like [conda](https://docs.anaconda.com/anaconda/install/) to accomplish this.  
 
-#### Installing tensorflow
-Installing latest version of tensorflow would automatically install numpy as well. 
+#### Installing numpy and tensorflow
 
 #to make sure latest verson of pip is installed.   
 `pip install --upgrade pip`    
+#installing latest verson of numpy  
+`pip install numpy`  
 #installing latest version of  tensorflow.       
 `pip install tensorflow`  
 
