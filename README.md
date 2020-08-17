@@ -11,13 +11,13 @@ A graphical representation of a feed forward type neural net used in the trainin
 
 
 ![flow_learn_diagram](https://user-images.githubusercontent.com/35903705/90431457-b2ebd800-e08e-11ea-9bdd-dde98b2673f7.jpg)
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;__Approximation of PDE operator using a feedforward neural network__
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;;__Approximation of PDE operator using a feedforward neural network__
 
 The FluidLearn api is built on top of tensorflow with keras model subclassing. Most of the  details are hidden from the end user, who will be dealing only with the fluidlearn package interface. For developers, with knowledge of keras and tensor flow APIs, who would like more control over the package or would like to add more features could do so easily by inspecting the modulular structure of the package. For all users, except developers, installation of the package from python's official [PyPi distribution](https://pypi.org/project/fluidlearn/) or pip is recommended. The latter users could use the code directly from [here](https://github.com/mjayadharan/FluidLearn/tree/master/fluidlearn) after setting up dependencies.  
 While the users will find no problem accessing the package through a regular python script, just like with any other machine learning library, it will be visually advantageous to use a notebook setting like jupyter notebook. For this reason, all the demo examples are available in both python(.py) and jupyter notebook (.ipynb) formats.
 
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![fluidlearn-dependency](https://user-images.githubusercontent.com/35903705/90439301-f5b3ad00-e09a-11ea-87bd-74a873bcfa3f.png)  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;__FluidLearn package dependency tree__
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;![fluidlearn-dependency](https://user-images.githubusercontent.com/35903705/90439301-f5b3ad00-e09a-11ea-87bd-74a873bcfa3f.png)  
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;__FluidLearn package dependency tree__
 
 ### Author 
 ------------
