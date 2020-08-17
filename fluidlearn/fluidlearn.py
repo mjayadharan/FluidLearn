@@ -7,9 +7,10 @@ try:
     from tensorflow import keras
     from tensorflow.keras import backend as K
     
-    import fluidmodels
-    import dataprocess
-    import losses
+    
+    from fluidlearn import fluidmodels
+    from fluidlearn import dataprocess
+    from fluidlearn import losses
 except Exception as e:
         print("Error occured while importing dependency packages. More details:\n",e)
         
@@ -17,7 +18,7 @@ __author__ = "Manu Jayadharan"
 __copyright__ = "Copyright 2020, fluidlearn"
 __credits__ = ["Manu Jayadharan"]
 __license__ = ""
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __maintainer__ = "Manu Jayadharan"
 __email__ = "manu.jayadharan@pitt.edu"
 __status__ = "Development"     

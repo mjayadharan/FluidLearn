@@ -1,2 +1,3 @@
 #__init__.py
-from .fluidlearn import *
+from fluidlearn.fluidlearn import Solver
+from fluidlearn.dataprocess import imp_from_csv
