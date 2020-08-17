@@ -1,37 +1,75 @@
-# FluidLearn
-Software package to solve PDEs governing fluid flow using Physics Inspired Neural Networks (PINNs) and estimate physical parameters using the trained network.
-Uses Keras API with TensorFlow2 as the backend. Developed as part of a project to study the use of artificial neural networks in solving computational fluid dynamics problem.   
+# [FluidLearn](https://github.com/mjayadharan/FluidLearn)
+-------------------------
+
+FluidLearn is a software package with python interface, capable of solving non-linear fluid flow problems using supervised deep learning techniques. The solution function is approximated as a neural network, which will be trained using labelled data.  
+
+Conceptually, this API could be used to solve any well-posed PDE system, given enough labelled data in the form of boundary and initial conditions. The architecture could also be used for physical parameter estimation and surrogate modelling. As of now, the package is oriented towards PDE systems governing fluid flow problems with many popular flow systems inbuilt.  Users have the option to train the model from external data, visualize the training curves, save the model, reload the model, continue training the saved model or make predictions from the saved models.   
+
+The package could be seen as an application of the [Physics Informed Neural Networks (PINNs)](https://arxiv.org/abs/1711.10561) which are artificial neural nets training with PDE constraints. The idea was first introduced in [this publication](https://arxiv.org/pdf/1711.10561.pdf) in 2017. For more details on the mathematical theory behind PINNs, please visit the website maintained by the author of the aforementioned publication [here](https://maziarraissi.github.io/PINNs/).  
+A graphical representation of a feed forward type neural net used in the training is shown below.
+
+
+
 ![flow_learn_diagram](https://user-images.githubusercontent.com/35903705/90431457-b2ebd800-e08e-11ea-9bdd-dde98b2673f7.jpg)
 
-### Note: 
-- As of now, the simulators are embdedded inside jupyter notebooks.    
-- Matplotlib is used as a visualization tool along with TensorBoard.  
-- Only feed forwards networks are implemented so far. Expect more advanced network structures to be implemented in future.  
-- Python module version of the package will be uploaded upon developing the UI  of the package to certain satisfactory level.   
+The FluidLearn api is built on top of tensorflow with keras model subclassing. Most of the  details are hidden from the end user, who will be dealing only with the fluidlearn package interface. For developers, with knowledge of keras and tensor flow APIs, who would like more control over the package or would like to add more features could do so easily by inspecting the modulular structure of the package. For all users, except developers, installation of the package from python's official [PyPi distribution](https://pypi.org/project/fluidlearn/) or pip is recommended. The latter users could use the code directly from [here](https://github.com/mjayadharan/FluidLearn/tree/master/fluidlearn) after setting up dependencies.  
+While the users will find no problem accessing the package through a regular python script, just like with any other machine learning library, it will be visually advantageous to use a notebook setting like jupyter notebook. For this reason, all the demo examples are available in both python(.py) and jupyter notebook (.ipynb) formats.
 
-## Author
------------
-Manu Jayadharan, Department of Mathematics at University of Pittsburgh, 2020
+![fluidlearn-dependency](https://user-images.githubusercontent.com/35903705/90439301-f5b3ad00-e09a-11ea-87bd-74a873bcfa3f.png)
 
+### Author 
+------------
+
+Manu Jayadharan, Department of Mathematics at University of Pittsburgh, 2020.  
 email: [manu.jayadharan@gmail.com](mailto:manu.jayadharan@gmail.com), [manu.jayadharan@pitt.edu](mailto:manu.jayadharan@pitt.edu)  
-[reserachgate](https://www.researchgate.net/profile/Manu_Jayadharan)  
+[researchgate](https://www.researchgate.net/profile/Manu_Jayadharan)  
 [linkedin](https://www.linkedin.com/in/manu-jayadharan/)
 
-## Installing python packages
-----------------------
-- You could install the required packages manually following the instruction below or run a shell script (inside the terminal) which will execute the steps below one by one. Please contact the author if you would like to get a shell script for installation or need assistance regarding setting up the dependency packages.  
-- Easiest way to satisfy packages dependencies is to use [anaconda](https://www.anaconda.com/).  
-- The following steps assume that you work on a terminal, if you work on windows, you could install anaconda following the instructions from [here](https://docs.anaconda.com/anaconda/install/windows/) and install the following packages using the windows GUI: numpy, pandas, matplotlib, scikit-learn, tensorflow, jupyter.  
-- A good documentation on installatin of anaconda can be found [here.](https://docs.anaconda.com/anaconda/install/linux/)
-- Creating an environment in anaconda to keep the package versions consistent:  
-`conda create --name myenv`
-`conda activate myenv`
-- Installing jupyter notebook:  
-`conda install jupyter`
-- Starting a jupyter notebook:  
- `jupyter notebook`  
-__Installing required packages:__   
-`conda install numpy matplotlib tensorflow`  
-__Installing recommended packages:__  
-`conda install numpy pandas matplotlib scikit-learn tensorflow jupyter`  
+## Installation
+-----------------------
 
+FluidLearn depends primarily on tensorflow (>=v2.2) and numpy. Make sure you have these packages already available, otherwise please follow the instructions below to install them. Installing all packages inside a separate environment is always recommended in order to prevent version conflicts. You could either use [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) package or a  package manager like [conda](https://docs.anaconda.com/anaconda/install/). 
+
+#### Installing tensorflow
+Installing latest version of tensorflow would automatically install numpy as well. 
+
+#to make sure latest verson of pip is installed.  
+`pip install --upgrade pip` 
+#installing latest version of  tensorflow.      
+`pip install tensorflow`
+
+Once installed make sure that you have a compatible version of tensorflow by running the following commands inside a py script or notebook.  
+`import tensorflow as tf  
+import numpy as np
+tf.__version__ >= '2.2.0'
+`
+
+#### Installing FluidLearn
+
+`pip install fluidlearn`
+
+### Other recommended packages for easy visualization
+
+- jupyter notebook for more interactive interface  
+    using pip:  
+    `pip install notebook`   
+    using conda:  
+    `conda install jupyter`    
+- matplotlib for visualization  
+    using pip:  
+    `python -m pip install -U pip`  
+    `python -m pip install -U matplotlib`  
+    or using conda:   
+    `conda install matplotlib`
+
+## Getting started with FluidLearn
+
+- Go through [examples](https://github.com/mjayadharan/FluidLearn/tree/master/examples) to understand the user interface of fluidlearn. 
+- Examples can be treated a tutorials with the two digit numerals at the beginning of the name indicating the order. For example examples/01_difussion_example is the first example in the series. This example shows how to upload data from a csv file, select nerual architechure, train the model, make prediction and finally how to save and reload the model. 
+- All examples are given in both jupter notebook and .py formats.
+
+## Coming in future versions
+
+- More examples demonstrating the abilities of the package.
+- More types of nueral network like convolutional nets.
+- Building user interface for physical parameter estimation.
