@@ -1,16 +1,13 @@
 #!/usr/bin/env python
+# Generated from a .ipynb file
+# __Author: Manu Jayadharan, University of Pittsburgh, 2020__
 
-#Exported from jupter notebook
 # # Using fluidlearn to solve diffusion equation
-###
-##Author: Manu Jayadharan, University of Pittsburgh, 2020.
-###
-# `Equation to solve: $u_t-\Delta u -f  = 0$
+
+# Equation to solve: $u_t-\Delta u -f  = 0$
 # over domain $\Omega$ from time T_initial to T_final.
 
-# For demonstration purposes we take $f=sin(x_1 + x_2) + tsin(x_1 + x_2)$ and $\Omega = [-2,2]\times [0,1]$ 
-# and the time interval to be $[0,1]$, so we can compare the results with the actual solution $u=tsin(x_1 + x_2)$.
-
+# For demonstration purposes we take $f=sin(x_1 + x_2) + tsin(x_1 + x_2)$ and $\Omega = [-2,2]\times [0,1]$ and the time interval to be $[0,1]$, so we can compare the results with the actual solution $u=tsin(x_1 + x_2)$.
 
 #Import fluidlearn package and classes
 import fluidlearn
@@ -20,7 +17,6 @@ from fluidlearn import dataprocess
 # ### Defining the domain and time interval for which the PDE needs to be solved.
 # This matters only for generating collocation points and if the user is feeding their own collocation points,
 # they can skip this step.
-
 
 #domain range
 X_1_domain = [-2, 2]
@@ -40,8 +36,6 @@ domain_bounds = [X_1_domain, X_2_domain, T_domain]
 # - You could load either preprocess your data to be in this format or load your data
 #   from a csv file with similar format.
 
-# In[3]:
-
 
 path_to_data = "data_manufactured/t_sin_x_plus_y.csv"
 X_data, Y_data = dataprocess.imp_from_csv(path_to_csv_file=path_to_data,
@@ -50,9 +44,6 @@ X_data, Y_data = dataprocess.imp_from_csv(path_to_csv_file=path_to_data,
 
 # ### Defining the rhs function $f=sin(x_1 + x_2) + tsin(x_1 + x_2)$ of the PDE.
 # We use tensorflow.sin function instead of python functions, we could used numpy.sin as well.
-
-# In[4]:
-
 
 def rhs_function (args, time_dep=True):
         import tensorflow as tf
@@ -66,7 +57,6 @@ def rhs_function (args, time_dep=True):
 
 
 # ### Defining the model architecture
-
 
 model_type = 'forward'
 space_dim = 2 #dimension of Omega
@@ -87,11 +77,7 @@ num_epochs = 10 #number of epochs used for trainng
 
 # ### Defining the fluidlearn solver 
 
-
-
 diffusion_model = fluidlearn.Solver()
-
-
 
 diffusion_model(model_type=model_type,
             space_dim=space_dim,
@@ -110,7 +96,6 @@ diffusion_model(model_type=model_type,
 
 # ### Fitting the model
 
-
 diffusion_model.fit(
     x=X_data,
     y=Y_data,
@@ -123,7 +108,6 @@ diffusion_model.fit(
 
 # ### Resuming Training  the model again for 50 more epochs
 
-
 diffusion_model.fit(
     x=X_data,
     y=Y_data,
@@ -134,21 +118,34 @@ diffusion_model.fit(
 )
 
 
+# ### Demo Using the trained model for predicton
+#taking two points from the domain for time t=0.3 and t=0.76 respectively
+x_test_points = [[-0.5,0.1,0.3],
+                [0.66,0.6,0.76]]
+#Predicting the value
+y_predicted = diffusion_model.predict(x_test_points)
+
+#finding the true y value for comparing
+import numpy as np
+x_test_points = np.array(x_test_points)
+y_true = np.sin(x_test_points[:,0:1] + x_test_points[:,1:2]) * x_test_points[:,2:3]
+
+#looking at predicted and true solution side by side.
+np.concatenate([y_predicted, y_true], axis=1)
+
+
+# Note that we need more training for further improving the accuracy.
+
 # ### Saving the model to a specified location.
-
-
 path_to_save_model = "saved_model/model_name"
 diffusion_model.save_model(path_to_save_model)
 
 
 # ### Loading the saved model 
-
-
 path_to_load_model = "saved_model/model_name"
 
+
 loaded_diffusion_model = fluidlearn.Solver()
-
-
 
 loaded_diffusion_model(space_dim=2,
     time_dep=True,
@@ -157,14 +154,7 @@ loaded_diffusion_model(space_dim=2,
 
 
 # ### Predicting using loaded model
-
-
 y_predicted = loaded_diffusion_model.predict(X_data)
 
 
-
-print("first 10 elements of prediction", y_predicted[:10])
-
-
-
-
+print("first 10 values of y_predicted: " y_predicted[:10])
