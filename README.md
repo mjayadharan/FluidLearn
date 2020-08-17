@@ -1,7 +1,7 @@
 # FluidLearn
 Software package to solve PDEs governing fluid flow using Physics Inspired Neural Networks (PINNs) and estimate physical parameters using the trained network.
 Uses Keras API with TensorFlow2 as the backend. Developed as part of a project to study the use of artificial neural networks in solving computational fluid dynamics problem.   
-
+![flow_learn_diagram](https://user-images.githubusercontent.com/35903705/90431457-b2ebd800-e08e-11ea-9bdd-dde98b2673f7.jpg)
 
 ### Note: 
 - As of now, the simulators are embdedded inside jupyter notebooks.    
