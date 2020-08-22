@@ -25,12 +25,30 @@ __status__ = "Development"
 
 class Solver:
     """
-    Main class for solving the PDES using the fluidlearn architechture. Users deal with it, 
-    talk about __call__ function
+    Main class for solving the PDES using the fluidlearn architechture. This class hide the details about
+    other fluidlearn modules from the end users with subclassing. Once initiated without any initial arguments,
+    __call__ function is used for feeding in most of the features to the solver. Note that in the documentation,
+    u representes the solution function and PDE(u,x,t,del(x),u_t) represents the sum of the PDE system so 
+    that P(u,x,t,del(x),u_t) = 0. 
     """
     def __init__(self):
         """
-        Doc string goes here
+        Class attributes: 
+        _time_dep (bool): True if the problem is time dependent.
+        _models_dict (dict): dictionary of available models Values are from fluidlearn.fluidmodels module.
+        _losses_dict (dict): dictionary of available loss functions for finding the cost function.
+                      Values are from fluidlearn.losses module.
+        _dom_bounds (list(list)): list of space_dim number of elements, where each element is
+                                  an intervel giving bound on the space domain, 
+                                  dom_bounds[-1] is time bounds if _time_dep=True.
+        _trained (bool): True if the model is trained at least once or if loaded from 
+                         pre-saved model.
+                         
+        _model (fluidlearn.fluidmodels.Model) : Place holder for the fluildlearn.fluidmodels.Model type model.
+                                                Initially None, and later assigned to value after self.create_model
+                                                is called.
+        _data_handler (fluidlearn.dataprocess.DataPreprocess ) : Place holder with None value. Initiated once __call__
+                                                                 method is called.
         """
         #Add a block for checking version compabilities.
         
@@ -51,7 +69,24 @@ class Solver:
                       output_dim, n_hid_lay, n_hid_nrn, act_func,
                        rhs_func):
         """
-        Doc string goes here
+        Class method to initially instantiate a model using fluidlearn.fluidmodels module
+        and save in self._model.
+        
+        Arguments:
+        model_type (str): Key to self._models_dict which should point to one of the models
+                          from fluidlearn.fluidmodels. Taken to be "forward by default".
+        space_dim (int):  Dimension of the space Omega where the PDE is defined.
+        time_dep (bool): True if the problem is time dependent.
+        output_dim (int):  Dimension of the range of the solution to PDE.
+        n_hid_layer (int)  Number of hidden layers in the neural network.
+        n_hid_nrn (int):  Number of neurons in each hidden layer of the NN.
+        act_func (string):  Activation functions for each of the hidden layers. Has to
+                            be one of the members of keras.activations: could be one of
+                            {"tanh", "sigmoid", "elu", "relu", "exponential"}
+        rhs_func: Rhs of the combined PDE system. Preferred to use tensorflow kind of 
+                  function definition with tf.functions and tensor forms (instead of python
+                  loops).
+        
         """
         
         assert (model_type in self._models_dict), "model_type not compatible, " \
@@ -65,7 +100,20 @@ class Solver:
     
     def compile_model(self, optimizer, loss_list, run_eagerly=False):
         """
-        Doc string goes here
+        Class method to compiled the model once it is created or loaded.
+        
+        Arguments:
+        optimizer (string): String representing key to one of tf.keras.Optimizers which will
+                            be used for updating the weights to minimize the cost (loss) function.
+                            Example include "adam" , "nadam", "sgd" etc.
+        loss_list (list): list of loss functions used for finding the cost (loss) function corresponding
+                          to the solution u and PDE(u,x,t) respectively in that order. Both elements  
+                          should point to functions defined in fluidlearn.losses.
+        run_eagerly (bool): True if you want tensorflow to run eagerly, that is to stop genearting 
+                            function graphs and run like a normal python function. Note that this should
+                            be used only for debugging. If activated, the tf.gradients won't work and 
+                            tf.GradientTape has to be used instead. Please refer to one of the debugging
+                            examples in dev-notebooks for more details.
         """
         
         assert (self._model !=None), "Model not created here, " \
@@ -77,7 +125,8 @@ class Solver:
     
     def get_model_summary(self):
         """
-        Doc string goes her
+        Class method to print  summary of the model. Throws exception if called before 
+        creating or loading a model.  
         """
         
         if self._model != None:
@@ -89,7 +138,7 @@ class Solver:
     def fit(self, x, y, x_val=[], y_val=[], validation=False, colloc_points=100, dist="uniform",
             batch_size=32, epochs=1,):
         """
-        Doc string goes here.
+        Class method to fit the model. 
         """
         assert (self._model !=None and self._data_handler != None), "Model and data handler" \
                                     " not created yet, run create_model() before compiling:\n"                        

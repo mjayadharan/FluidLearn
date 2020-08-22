@@ -5,7 +5,7 @@ FluidLearn is a software package with python interface, capable of solving non-l
 
 Conceptually, this API could be used to solve any well-posed PDE system on complex geometric structures, given enough labelled data in the form of boundary and initial conditions. The architecture could also be used for physical parameter estimation and surrogate modelling. As of now, the package is oriented towards PDE systems governing fluid flow problems with many popular flow systems inbuilt.  Users have the option to train the model from external data, visualize the training curves, save the model, reload the model, continue training the saved model or make predictions from the saved models.   
 
-The package could be seen as an application of the [Physics Informed Neural Networks (PINNs)](https://arxiv.org/abs/1711.10561) which are artificial neural nets training with PDE constraints. The idea was first introduced in [this publication](https://arxiv.org/pdf/1711.10561.pdf) in 2017. For more details on the mathematical theory behind PINNs, please visit the website maintained by the authors of the aforementioned publication [here](https://maziarraissi.github.io/PINNs/).  
+The package could be seen as an application of the [Physics Informed Neural Networks (PINNs)](https://arxiv.org/abs/1711.10561) which are artificial neural nets trained with PDE constraints. The idea was first introduced in [this publication](https://arxiv.org/pdf/1711.10561.pdf) in 2017. For more details on the mathematical theory behind PINNs, please visit the website maintained by the authors of the aforementioned publication [here](https://maziarraissi.github.io/PINNs/).  
 A graphical representation of a feed forward type neural net used in the training is shown below.
 
 
@@ -30,7 +30,7 @@ email: [manu.jayadharan@gmail.com](mailto:manu.jayadharan@gmail.com), [manu.jaya
 ## Installation
 -----------------------
 
-FluidLearn depends primarily on tensorflow (>=v2.2) and numpy. Make sure you have these packages already available, otherwise please follow the instructions below to install them. Installing all packages inside a separate environment is always recommended in order to prevent version conflicts. You could either use [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) package or a  package manager like [conda](https://docs.anaconda.com/anaconda/install/) to accomplish this.  
+FluidLearn depends primarily on tensorflow (>=v2.2) and numpy. Make sure you have these packages installed before installing fluidlearn, in case they are not available already,  please follow the instructions below to install them. Installing all packages inside a separate environment is always recommended in order to prevent version conflicts. You could either use [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) package or a  package manager like [conda](https://docs.anaconda.com/anaconda/install/) to accomplish this.  
 
 #### Installing tensorflow
 Installing latest version of tensorflow would automatically install numpy as well. 

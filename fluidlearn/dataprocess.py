@@ -31,7 +31,7 @@ class DataPreprocess:
         
         dom_bounds (list of lists) - list of space_dim number of elements,
         where each element is an intervel giving bound on the space domain,
-        dom_bounds[-1] is time boudns if _time_dep=True.
+        dom_bounds[-1] is time bounds if _time_dep=True.
         
         _time_dep (bool) - true if the pde is time dependent.
         """
