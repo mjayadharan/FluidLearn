@@ -8,9 +8,12 @@ try:
     from tensorflow.keras import backend as K
     
     
-    from fluidlearn import fluidmodels
-    from fluidlearn import dataprocess
-    from fluidlearn import losses
+#     from fluidlearn import fluidmodels
+#     from fluidlearn import dataprocess
+#     from fluidlearn import losses
+    import fluidmodels
+    import dataprocess
+    import losses
 except Exception as e:
         print("Error occured while importing dependency packages. More details:\n",e)
         
@@ -54,7 +57,7 @@ class Solver:
         
         #class specific variables
         self._time_dep = False
-        self._models_dict = {"forward":fluidmodels.ForwardModel}
+        self._models_dict = {"forward":fluidmodels.ForwardModel, "poisson":fluidmodels.Poisson}
         self._losses_dict ={"mse":[losses.u_loss, losses.pde_loss]}
         self._dom_bounds =[[]]
         self._trained = False
