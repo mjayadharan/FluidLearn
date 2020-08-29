@@ -78,7 +78,77 @@ class DataPreprocess:
             return X_data_return, Y_data_np
         else:
             return X_data_return
+
+class BcIcDataManufact:
+    """
+    Class to generate Boundary and Initial Condition Data.
+    """
+    def __init__(self, dom_bounds):
+        """
+        Attributes:
+        dom_bounds (list of lists) - list of  list, where each
+        element list is an intervel giving bound for interval from
+        which random points needs to be generated.
+        dim = dimension of the space where the points are generated
+        """
+        self.__dom_bounds = dom_bounds
+        self.__dim = len(dom_bounds)
         
+        
+    def generate_uniform_data(self, dom_bounds, n):
+        """
+        Generates uniformly distributed points in intervals defined by dom_bounds
+        
+        Arguments:
+        dom_bounds (list of lists) - list of  list, where each
+        element list is an intervel giving bound for interval from
+        which random points needs to be generated.
+        n (int) - number of data points to be generated from each interval
+        
+        Return: np.ndarray of shape (n,len(dom_bounds))
+        """
+        generated_data = np.zeros((n,len(dom_bounds)))
+        
+        for i in range(len(dom_bounds)):
+            generated_data[:,i] = np.random.uniform(low=dom_bounds[i][0],
+                                                   high=dom_bounds[i][1],
+                                                   size=n)
+        return generated_data
+    
+    def generate_uniform_bc_ic(self, n):
+        """
+        Generates uniformly distributed boundary/Initial condition points
+        lying on the boundary of hypercube defined by the intervals stored 
+        in self.__dom_bounds
+        
+        Arguments:
+        n (int) - number of data points to be generated from each part of
+        the boundary.
+        
+        Return: np.ndarray of shape (k*n,self.__dim), where k 
+        is the number of faces(boundaries) of the hypercube which is indeed
+        equal to 2*dim.
+        """
+        #allocating space for the output ndarray
+        generated_data = np.zeros((2*self.__dim*n,self.__dim))
+        
+        #to keep track of where to add elements in generated_data
+        entry_index = 0 
+        
+        for dim_i in range(self.__dim): #going over each element in self.__dom_bound
+            for j in range(2): #to iterate over lower and upper bound
+                generated_sub_data = self.generate_uniform_data(self.__dom_bounds, n)
+    
+                #Making the appropriate column corresponding to boudnayr condition,
+                #x_i = upper/lower bound
+                generated_sub_data[:,dim_i] = self.__dom_bounds[dim_i][j]*np.ones(n)
+                
+                #finally adding the generated bc/ic to final output array
+                generated_data[entry_index:entry_index+n,:] = generated_sub_data
+                
+                entry_index += n
+        
+        return generated_data        
         
         
         
