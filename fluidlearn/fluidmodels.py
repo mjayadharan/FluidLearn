@@ -238,21 +238,21 @@ class ForwardModel(tf.keras.Model):
         elif not training: #only outputting the function value if not tranining.
                 return output_layer
 
-class Poission(ForwardModel):
+class Poisson(ForwardModel):
     """
     Doc string goes here
     """
     
-    def __init__(self, space_dim=1, perm_tensor=None, output_dim=1,
+    def __init__(self, space_dim=1, time_dep=False, output_dim=1,
                  n_hid_lay=3, n_hid_nrn=20, act_func = "tanh", rhs_func = None):
         """
         talk about super initialization
         """
         
-        super.__init__(space_dim=space_dim, time_dep=False, output_dim=output_dim,
+        super().__init__(space_dim=space_dim, time_dep=time_dep, output_dim=output_dim,
                  n_hid_lay=n_hid_lay, n_hid_nrn=n_hid_nrn, act_func = act_func, rhs_func = rhs_func)
         
-        self._perm_tensor = perm_tensor if perm_tensor else tf.eye(space_dim)
+#         self._perm_tensor = perm_tensor if perm_tensor else tf.eye(space_dim)
 
     #final layer representing the lhs P(x) of PDE P(x)=0
     def findPdeLayer(self, laplacian, input_arg):
@@ -274,7 +274,7 @@ class Poission(ForwardModel):
         
         """
         try:
-            return keras.layers.Lambda(lambda z: -z[0] - self.rhs_function(input_arg)) ([laplacian, input_arg])
+            return keras.layers.Lambda(lambda z: -z[0] - self.rhs_function(z[1])) ([laplacian, input_arg])
         except Exception as e:
             raise Exception("Error occured in finding pde  lambda layer of type {} as follows: \n{}".format(type(e)),e)
         
@@ -293,8 +293,7 @@ class Poission(ForwardModel):
         Note that inputs should always be given as a list with the last element of the list representing the 
         dimension corresponding to time.
         """
-        if self.time_dep:
-            input_space = inputs
+        input_space = inputs
             
         #concatening all the input data (space and time dimensions) making it 
         #read to be passed to the hidden layers
