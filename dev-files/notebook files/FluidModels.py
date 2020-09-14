@@ -3,7 +3,6 @@
 
 # In[9]:
 
-
 """
 Module containng custom Keras models and layers required for FlowNet architecture.
 """

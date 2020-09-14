@@ -40,7 +40,7 @@ def u_loss(y_true, y_pred):
     
     y_true_act = y_true[:,:-1]
     #using the last column of y_true_act to check whether the point is at the boundary
-    at_boundary = tf.cast(y_true[:,-1:,],bool)
+    at_boundary = tf.cast(y_true[:,-1:],bool)
     u_sq_error = (1/2)*tf.square(y_true_act-y_pred)
     return tf.where(at_boundary, u_sq_error, 0.)
 
@@ -68,7 +68,7 @@ def pde_loss(y_true, y_pred):
     """
     y_true_act = y_true[:,:-1]
     #using the last column of y_true_act to check whether the point is at the boundary
-    at_boundary = tf.cast(y_true[:,-1:,],bool)
+    at_boundary = tf.cast(y_true[:,-1:],bool)
     pde_sq_error = (1/2)*tf.square(y_pred)
     return tf.where(at_boundary,0.,pde_sq_error)
 
