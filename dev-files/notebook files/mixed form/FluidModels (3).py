@@ -502,7 +502,6 @@ class MixedDif(ForwardModel):
             
             #finding gradient of pressure with respect to space dim
             grad_layer = self.findGrad(pres_output_layer, input_space)
-#             laplace_layer = self.findLaplace(grad_layer, input_space)
             #finding divergence of the velocity layer with respect to space dim
             div_layer = self.findDivLayer(vel_output_layer, input_space)
         
@@ -513,10 +512,12 @@ class MixedDif(ForwardModel):
                 time_der_layer=0
             #PDE_1 = 0 the scalar equation of the form p_t - div(u) -f = 0
             pde_layer_1 = self.findPdeLayer(div_layer, inputs, time_der_layer)
-            pde_layer_2 = self.findPdeLayer_2(grad_layer, vel_output_layer)
+#             pde_layer_2 = self.findPdeLayer_2(grad_layer, vel_output_layer)
 
-            return pres_output_layer, pde_layer_1, pde_layer_2
+#             return pres_output_layer, pde_layer_1, pde_layer_2
+            return pres_output_layer, pde_layer_1
         
         elif not training: #only outputting the function value if not tranining.
-                return pres_output_layer, vel_output_layer
+#                 return pres_output_layer, vel_output_layer
+                return pres_output_layer
 

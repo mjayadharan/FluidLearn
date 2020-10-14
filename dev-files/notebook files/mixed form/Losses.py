@@ -78,10 +78,10 @@ def pde_loss(y_true, y_pred):
     return tf.where(at_boundary,0.,pde_sq_error)
 
 
-# In[3]:
+# In[11]:
 
 
-def p_loss_mixed(y_true, y_pred, space_dim):
+def p_loss_mixed(y_true, y_pred):
     """
     Loss function to take care of boundary and initial data,
     when the pde is in it's mixed form.
@@ -114,7 +114,7 @@ def p_loss_mixed(y_true, y_pred, space_dim):
 
 def p_pde_loss_mixed(y_true, y_pred):
     """
-    Loss function to take care of pde constrain. 
+    Loss function to take care of pressure(scalar) pde constrain. 
     (tensor, tensor) -> tensor
     
     arguments:
@@ -142,7 +142,7 @@ def p_pde_loss_mixed(y_true, y_pred):
 
 def u_pde_loss_mixed(y_true, y_pred):
     """
-    Loss function to take care of pde constrain. 
+    Loss function to take care of velocity pde constrain (A vector is coming in as y_pred). 
     (tensor, tensor) -> tensor
     
     arguments:
@@ -165,8 +165,9 @@ def u_pde_loss_mixed(y_true, y_pred):
     y_true_act = y_true[:,:-1]
     #using the last column of y_true_act to check whether the point is at the boundary
     at_boundary = tf.cast(y_true[:,-1:,],bool)
-    pde_sq_error = (1/2)*tf.square(y_pred)
-    return tf.where(at_boundary,0.,tf.mean(pde_sq_error), axis=-1)
+    y_pred_tensor = tf.convert_to_tensor(y_pred)
+    pde_sq_error = (1/2)*tf.square(y_pred_tensor)
+    return tf.where(at_boundary,0.,tf.mean(pde_sq_error, axis=-1))
 
 
 # In[ ]:
