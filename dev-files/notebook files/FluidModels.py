@@ -240,7 +240,7 @@ class ForwardModel(tf.keras.Model):
             return output_layer, pde_layer
         
         elif not training: #only outputting the function value if not tranining.
-                return output_layer
+                return output_layer, self.findGrad(output_layer, input_space)
 
 
         
